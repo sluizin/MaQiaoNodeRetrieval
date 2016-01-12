@@ -28,13 +28,13 @@ public abstract class extNode {
 	}
 
 	/**
-	 * 节点的标识值
+	 * 节点的 节点值 或 标识数[暂时用于排序]
 	 * @return long
 	 */
 	public abstract long extNodeValue();
 
 	/**
-	 * 对象的 System.identityHashCode
+	 * 对象的 系统级HashCode值 [System.identityHashCode]
 	 * @return long
 	 */
 	public long iNodeSystemHashCode() {

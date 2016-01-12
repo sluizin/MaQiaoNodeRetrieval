@@ -2,7 +2,7 @@ package testMQLinkedlistDoubleendRetrieval;
 
 import org.junit.Test;
 
-import MaQiao.MaQiaoNodeRetrieval.NodeCommon2;
+import MaQiao.MaQiaoNodeRetrieval.NodeCommon;
 import MaQiao.MaQiaoNodeRetrieval.UtilTool;
 import MaQiao.MaQiaoNodeRetrieval.extNode;
 
@@ -13,17 +13,17 @@ public class test2 {
 	public void test() {
 		final node start = new node(0, "0");
 		init(start);
-		final node end = (node) NodeCommon2.NodeLocationEnd(start);
-		NodeCommon2.toPrintAll(start);
+		final node end = (node) NodeCommon.nodeLocationEnd(start);
+		NodeCommon.toPrintAll(start);
 		System.out.println("------------------------------");
 		node c = new node(99, "" + 99);
-		System.out.println("NodeLength:" + NodeCommon2.NodeLength(start));
+		System.out.println("NodeLength:" + NodeCommon.nodeLength(start));
 		System.out.println("------------------------------");
-		NodeCommon2.NodeInsertByNodeNum(start, c, 2);
-		NodeCommon2.toPrintAll(start);
+		NodeCommon.nodeInsertByNodeNum(start, c, 2);
+		NodeCommon.toPrintAll(start);
 		System.out.println("------------------------------");
-		node frndOne = (node) NodeCommon2.NodeSearchByValue(start, 3);
-		NodeCommon2.toPrint(frndOne);
+		node frndOne = (node) NodeCommon.nodeSearchByValue(start, 3);
+		NodeCommon.toPrint(frndOne);
 		System.out.println("------------------------------");
 	}
 
@@ -32,7 +32,7 @@ public class test2 {
 		node p = start;
 		for (i = 1; i <= 5; i++) {
 			node c = new node(i, "" + i);
-			NodeCommon2.NodeInsertByNodeNext(p, c);
+			NodeCommon.nodeInsertByNodeNext(p, c);
 			p = c;
 		}
 
@@ -53,15 +53,15 @@ public class test2 {
 
 		@Override
 		public String toString() {
-			int size=8;
+			int size = 8;
 			StringBuilder sb = new StringBuilder(100);
 			sb.append("node (F:");
-			if (super.getForward() != null) sb.append(UtilTool.format(System.identityHashCode(super.getForward()),size,' '));
+			if (super.getForward() != null) sb.append(UtilTool.format(System.identityHashCode(super.getForward()), size, ' '));
 			else sb.append("        ");
 			sb.append(")[");
-			sb.append(UtilTool.format(super.iNodeSystemHashCode(),size,' '));
+			sb.append(UtilTool.format(super.iNodeSystemHashCode(), size, ' '));
 			sb.append("](N:");
-			if (super.getNext() != null) sb.append(UtilTool.format(System.identityHashCode(super.getNext()),size,' '));
+			if (super.getNext() != null) sb.append(UtilTool.format(System.identityHashCode(super.getNext()), size, ' '));
 			else sb.append("        ");
 			sb.append(")");
 			sb.append("\t[");
