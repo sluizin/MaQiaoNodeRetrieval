@@ -13,26 +13,47 @@ public class test2 {
 	public void test() {
 		final node start = new node(0, "0");
 		init(start);
-		final node end = (node) NodeCommon.nodeLocationEnd(start);
-		NodeCommon.toPrintAll(start);
+		final node end = (node) NodeCommon.locationEnd(start);
+		//NodeCommon.toPrintAll(start);
 		System.out.println("------------------------------");
 		node c = new node(99, "" + 99);
-		System.out.println("NodeLength:" + NodeCommon.nodeLength(start));
-		System.out.println("------------------------------");
-		NodeCommon.nodeInsertByNodeNum(start, c, 2);
+		//System.out.println("NodeLength:" + NodeCommon.nodeLength(start));
+		NodeCommon.insertByNodeNum(start, c, 2);	
+		
+		node d = new node(10, "" + 10);
+		//System.out.println("NodeLength:" + NodeCommon.nodeLength(start));
+		NodeCommon.insertByNodeNum(start, d, 0);		
+		node e = new node(100, "" + 100);
+		//System.out.println("NodeLength:" + NodeCommon.nodeLength(start));
+		NodeCommon.insertByNodeNum(start, e, 3);
+		node f = new node(4, "" + 4);
+		//System.out.println("NodeLength:" + NodeCommon.nodeLength(start));
+		NodeCommon.insertByNodeNum(start, f, 4);	
 		NodeCommon.toPrintAll(start);
-		System.out.println("------------------------------");
-		node frndOne = (node) NodeCommon.nodeSearchByValue(start, 3);
-		NodeCommon.toPrint(frndOne);
-		System.out.println("------------------------------");
+		System.out.println("------------------------------");	
+		NodeCommon.orderingReset(start);
+		NodeCommon.toPrintAll(start);
+		
+		//System.out.println("----------nodeTurnDirection--------------------");
+		//NodeCommon.turnDirection(start);
+		//NodeCommon.toPrintAll(start);
+		//System.out.println("----:"+NodeCommon.searchNode(start,d));
+		//node frndOne = (node) NodeCommon.nodeSearchByValue(start, 3);
+		//NodeCommon.toPrint(frndOne);
+		//System.out.println("------------------------------");
+		//node g = new node(12, "" + 12);
+		//NodeCommon.insertByHead(start, g);
+		//NodeCommon.toPrintAll(start);
+		System.out.println("--------11111111111111111111111----------------------");
+		NodeCommon.toPrint(NodeCommon.searchByValueDeprecated(d, 2));
+		//NodeCommon
 	}
 
 	private void init(node start) {
-		int i = 0;
 		node p = start;
-		for (i = 1; i <= 5; i++) {
+		for (int i = 1; i <= 5; i++) {
 			node c = new node(i, "" + i);
-			NodeCommon.nodeInsertByNodeNext(p, c);
+			NodeCommon.insertByNodeNext(p, c);
 			p = c;
 		}
 
@@ -69,7 +90,7 @@ public class test2 {
 			sb.append(value);
 			sb.append(", str=");
 			sb.append(str);
-			sb.append(",value=");
+			sb.append(",identityHashCode=");
 			sb.append(System.identityHashCode(value));
 			sb.append("]");
 			return sb.toString();
