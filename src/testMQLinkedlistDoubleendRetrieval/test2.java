@@ -8,7 +8,9 @@ import MaQiao.MaQiaoNodeRetrieval.extNode;
 
 public class test2 {
 
-	@SuppressWarnings("unused")
+	public long maxrows = 3000000L;
+
+	@SuppressWarnings({ "unused", "deprecation" })
 	@Test
 	public void test() {
 		final node start = new node(0, "0");
@@ -16,24 +18,24 @@ public class test2 {
 		final node end = (node) NodeCommon.locationEnd(start);
 		//NodeCommon.toPrintAll(start);
 		System.out.println("------------------------------");
-		node c = new node(99, "" + 99);
+		//node c = new node(99, "" + 99);
 		//System.out.println("NodeLength:" + NodeCommon.nodeLength(start));
-		NodeCommon.insertByNodeNum(start, c, 2);	
-		
-		node d = new node(10, "" + 10);
+		//NodeCommon.insertByNodeNum(start, c, 2);	
+		int center = (int) (maxrows / 2);
+		node d = new node(center, "" + center);
 		//System.out.println("NodeLength:" + NodeCommon.nodeLength(start));
-		NodeCommon.insertByNodeNum(start, d, 0);		
-		node e = new node(100, "" + 100);
+		NodeCommon.insertByNodeNum(start, d, center);
+		//node e = new node(100, "" + 100);
 		//System.out.println("NodeLength:" + NodeCommon.nodeLength(start));
-		NodeCommon.insertByNodeNum(start, e, 3);
-		node f = new node(4, "" + 4);
+		//NodeCommon.insertByNodeNum(start, e, 3);
+		//node f = new node(4, "" + 4);
 		//System.out.println("NodeLength:" + NodeCommon.nodeLength(start));
-		NodeCommon.insertByNodeNum(start, f, 4);	
-		NodeCommon.toPrintAll(start);
-		System.out.println("------------------------------");	
-		NodeCommon.orderingReset(start);
-		NodeCommon.toPrintAll(start);
-		
+		//NodeCommon.insertByNodeNum(start, f, 4);	
+		//NodeCommon.toPrintAll(start);
+		//System.out.println("------------------------------");	
+		//NodeCommon.orderingReset(start);
+		//NodeCommon.toPrintAll(start);
+
 		//System.out.println("----------nodeTurnDirection--------------------");
 		//NodeCommon.turnDirection(start);
 		//NodeCommon.toPrintAll(start);
@@ -44,14 +46,36 @@ public class test2 {
 		//node g = new node(12, "" + 12);
 		//NodeCommon.insertByHead(start, g);
 		//NodeCommon.toPrintAll(start);
+		long array[] = { maxrows - 1, 2900099, 10, 1, 1500, 2900099, 2900099, maxrows - 10, 2900099, 2900099, 2900099, 2900099, 2900099, 2900099, 2900099 };
+		//long array[]={1,2,3,4,5,6,7,8};
 		System.out.println("--------11111111111111111111111----------------------");
-		NodeCommon.toPrint(NodeCommon.searchByValueDeprecated(d, 2));
-		//NodeCommon
+		{
+			long time1 = System.nanoTime();
+			for (int i = 0; i < array.length; i++) {
+				System.out.println("length2:"+NodeCommon.length2(d));
+				System.out.println("****************-- search out" + i + " \t-->->->->:" + NodeCommon.toString(NodeCommon.searchByValue(d, array[i])));
+			}
+
+			long time2 = System.nanoTime();
+			System.out.println("SingleThreadtime:\t" + (time2 - time1));
+
+		}
+		System.out.println("--------22222222222222222222222----------------------");
+		{
+			long time1 = System.nanoTime();
+			for (int i = 0; i < array.length; i++) {
+				System.out.println("length2:"+NodeCommon.length2(d));
+				System.out.println("****************-- search out" + i + " \t-->->->->:" + NodeCommon.toString(NodeCommon.searchByValueDeprecated(d, array[i])));
+			}
+			long time2 = System.nanoTime();
+			System.out.println("MultiThreadtime:\t" + (time2 - time1));// /1000000L
+
+		}
 	}
 
 	private void init(node start) {
 		node p = start;
-		for (int i = 1; i <= 5; i++) {
+		for (int i = 1; i <= maxrows; i++) {
 			node c = new node(i, "" + i);
 			NodeCommon.insertByNodeNext(p, c);
 			p = c;

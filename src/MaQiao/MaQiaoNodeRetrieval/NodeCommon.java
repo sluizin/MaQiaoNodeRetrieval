@@ -575,32 +575,32 @@ public final class NodeCommon {
 	@Deprecated
 	public static final extNode searchByValueDeprecated(final extNode rndNode, final long value) {
 		if (rndNode == null) return null;
-		nodeAttr nodeAttr = new nodeAttr(value);
+		ThreadNodeAttribList.nodeAttrEquals nodeAttr = new ThreadNodeAttribList.nodeAttrEquals(value);
 		nodeAttr.input = rndNode;
-		ThreadGroup tg = new ThreadGroup("My Group");
-		NodeThread thrd1 = new NodeThread(tg, "MyThread #1 Next", nodeAttr, false);
-		System.out.println(thrd1.getName());
-		NodeThread thrd2 = new NodeThread(tg, "MyThread #2 Forward", nodeAttr, true);
-		System.out.println(thrd2.getName());
-		thrd1.start();
-		thrd2.start();
+		ThreadNodeConsts.nodeThread1.nodeAttr = nodeAttr;
+		ThreadNodeConsts.nodeThread1.working = true;
+		ThreadNodeConsts.nodeThread2.nodeAttr = nodeAttr;
+		ThreadNodeConsts.nodeThread2.working = true;
 		while (true) {
-			if (nodeAttr.getResultSuccess()) { return nodeAttr.getResult(); }
+			if (nodeAttr.getDoubleFindSuccess()) { return nodeAttr.getResult(); }
 		}
 	}
 
-	public static final class nodeAttr extends ThreadNodeAttribute {
-		long value = 0L;
-
-		nodeAttr(long value) {
-			this.value = value;
+	/**
+	 * 随机节点 -> 得到链表的长度<br/>
+	 * @param rndNode extNode
+	 * @return long
+	 */
+	public static final long length2(final extNode rndNode) {
+		if (rndNode == null) return 0;
+		ThreadNodeAttribList.nodeAttrSummary nodeAttr = new ThreadNodeAttribList.nodeAttrSummary();
+		nodeAttr.input = rndNode;
+		ThreadNodeConsts.nodeThread1.nodeAttr = nodeAttr;
+		ThreadNodeConsts.nodeThread1.working = true;
+		ThreadNodeConsts.nodeThread2.nodeAttr = nodeAttr;
+		ThreadNodeConsts.nodeThread2.working = true;
+		while (true) {
+			if (nodeAttr.getDoubleFindSuccess()) { return nodeAttr.getSort(); }
 		}
-
-		@Override
-		public boolean compare(extNode p) {
-			if (p.extNodeValue() == value) return true;
-			else return false;
-		}
-
 	}
 }
