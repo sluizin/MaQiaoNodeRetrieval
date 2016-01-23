@@ -5,6 +5,9 @@ import static MaQiao.MaQiaoNodeRetrieval.Consts.sequence;
 import java.util.ArrayList;
 import java.util.List;
 
+import MaQiao.MaQiaoNodeRetrieval.ThreadNodeAttribList.nodeAttrSummary;
+import MaQiao.MaQiaoNodeRetrieval.ThreadNodeConsts;
+
 /**
  * 链表通用方法<br/>
  * <font color='red'>注意：rndNode节点为随机节点(不代表链表头或链表尾)</font><br/>
@@ -576,11 +579,7 @@ public final class NodeCommon {
 	public static final extNode searchByValueDeprecated(final extNode rndNode, final long value) {
 		if (rndNode == null) return null;
 		ThreadNodeAttribList.nodeAttrEquals nodeAttr = new ThreadNodeAttribList.nodeAttrEquals(value);
-		nodeAttr.input = rndNode;
-		ThreadNodeConsts.nodeThread1.nodeAttr = nodeAttr;
-		ThreadNodeConsts.nodeThread1.working = true;
-		ThreadNodeConsts.nodeThread2.nodeAttr = nodeAttr;
-		ThreadNodeConsts.nodeThread2.working = true;
+		threadNodeRun(rndNode, nodeAttr);
 		while (true) {
 			if (nodeAttr.getDoubleFindSuccess()) { return nodeAttr.getResult(); }
 		}
@@ -593,14 +592,21 @@ public final class NodeCommon {
 	 */
 	public static final long length2(final extNode rndNode) {
 		if (rndNode == null) return 0;
-		ThreadNodeAttribList.nodeAttrSummary nodeAttr = new ThreadNodeAttribList.nodeAttrSummary();
-		nodeAttr.input = rndNode;
-		ThreadNodeConsts.nodeThread1.nodeAttr = nodeAttr;
-		ThreadNodeConsts.nodeThread1.working = true;
-		ThreadNodeConsts.nodeThread2.nodeAttr = nodeAttr;
-		ThreadNodeConsts.nodeThread2.working = true;
+		nodeAttrSummary nodeAttr = new nodeAttrSummary();
+		threadNodeRun(rndNode, nodeAttr);
 		while (true) {
 			if (nodeAttr.getDoubleFindSuccess()) { return nodeAttr.getSort(); }
 		}
+	}
+
+	/**
+	 * 设置双线程参数。准备开启
+	 * @param rndNode extNode
+	 * @param nodeAttr ThreadNodeAttributeAbstract
+	 */
+	private static final void threadNodeRun(final extNode rndNode, final ThreadNodeAttributeAbstract nodeAttr) {
+		nodeAttr.input = rndNode;
+		ThreadNodeConsts.nodeThread1.nodeAttr = ThreadNodeConsts.nodeThread2.nodeAttr = nodeAttr;
+		ThreadNodeConsts.nodeThread1.working = ThreadNodeConsts.nodeThread2.working = true;
 	}
 }

@@ -7,8 +7,13 @@ package MaQiao.MaQiaoNodeRetrieval;
  */
 public final class ThreadNodeConsts {
 
-	@SuppressWarnings("unused")
+	/**
+	 * 静态化线程组
+	 * @author Sunjian
+	 *
+	 */
 	public static final class nodeThreadRun implements Runnable {
+		@SuppressWarnings("unused")
 		private int locked = 0;
 		volatile boolean working = true;
 		volatile boolean stopped = false;
@@ -26,7 +31,6 @@ public final class ThreadNodeConsts {
 		@Override
 		public void run() {
 			//System.out.println("Static " + Thread.currentThread().getName() + " starting.");
-			extNode p = null;
 			try {
 				while (true) {
 					if (this.working && nodeAttr != null) {
@@ -114,13 +118,13 @@ public final class ThreadNodeConsts {
 				nodeThread1.forward = false;
 			}
 			Thread myth1 = new Thread(nodeThreadGroup, nodeThread1);
-			myth1.setName("Static MyThread #1 Next");
+			myth1.setName("MyThread #1 ");
 			{
 				nodeThread1.nodeAttr = null;
 				nodeThread1.forward = true;
 			}
 			Thread myth2 = new Thread(nodeThreadGroup, nodeThread2);
-			myth2.setName("Static MyThread #2 Next");
+			myth2.setName(" MyThread #2 ");
 			myth1.start();
 			myth2.start();
 

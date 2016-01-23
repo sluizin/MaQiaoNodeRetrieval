@@ -1,5 +1,7 @@
 package MaQiao.MaQiaoNodeRetrieval;
 
+import java.util.Random;
+
 /**
  * 工具方法集
  * @author Sunajin
@@ -7,6 +9,42 @@ package MaQiao.MaQiaoNodeRetrieval;
  * @version 1.0
  */
 public final class UtilTool {
+	static Random rd1 = new Random();
+	/**
+	 * 得到min-max之间的随机数
+	 * @param min int
+	 * @param max int
+	 * @return int
+	 */
+	public final static int getRndInt(final int min, final int max) {
+		return min + rd1.nextInt(max - min + 1);
+	}
+	/**
+	 * 把数组输出成String
+	 * @param array T[]
+	 * @param multi boolean
+	 * @return String
+	 */
+	public static final <T> String getString(final T[] array, final boolean multi) {
+		StringBuilder sb = new StringBuilder(100);
+		if (multi) sb.append("-------------\n");
+		else sb.append('[');
+		for (int i = 0, len = array.length; i < len; i++) {
+			T t = array[i];
+			if (t == null) continue;
+			if (multi) sb.append(i + ':');
+			if (t instanceof String) {
+				sb.append('\"');
+				sb.append(array[i].toString());
+				sb.append('\"');
+			} else sb.append(array[i].toString());
+			if (i < len - 1)  if (!multi)sb.append(',');
+			if (multi) sb.append('\n');
+		}
+		if (multi) sb.append("-------------\n");
+		else sb.append(']');
+		return sb.toString();
+	}
 	/**
 	 * 格式化long 使用String.subString()方法
 	 * @param num long

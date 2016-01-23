@@ -1,7 +1,6 @@
 package testMQLinkedlistDoubleendRetrieval;
 
 import org.junit.Test;
-
 import MaQiao.MaQiaoNodeRetrieval.NodeCommon;
 import MaQiao.MaQiaoNodeRetrieval.UtilTool;
 import MaQiao.MaQiaoNodeRetrieval.extNode;
@@ -9,10 +8,14 @@ import MaQiao.MaQiaoNodeRetrieval.extNode;
 public class test2 {
 
 	public long maxrows = 3000000L;
+	public int maxrowsInt = 0;
 
 	@SuppressWarnings({ "unused", "deprecation" })
 	@Test
 	public void test() {
+		if (maxrows > Integer.MAX_VALUE && maxrows < Integer.MIN_VALUE) {
+			maxrowsInt = 0;
+		} else maxrowsInt = (int) maxrows;
 		final node start = new node(0, "0");
 		init(start);
 		final node end = (node) NodeCommon.locationEnd(start);
@@ -21,7 +24,7 @@ public class test2 {
 		//node c = new node(99, "" + 99);
 		//System.out.println("NodeLength:" + NodeCommon.nodeLength(start));
 		//NodeCommon.insertByNodeNum(start, c, 2);	
-		int center = (int) (maxrows / 2);
+		int center = maxrowsInt / 2;
 		node d = new node(center, "" + center);
 		//System.out.println("NodeLength:" + NodeCommon.nodeLength(start));
 		NodeCommon.insertByNodeNum(start, d, center);
@@ -46,25 +49,40 @@ public class test2 {
 		//node g = new node(12, "" + 12);
 		//NodeCommon.insertByHead(start, g);
 		//NodeCommon.toPrintAll(start);
-		long array[] = { maxrows - 1, 2900099, 10, 1, 1500, 2900099, 2900099, maxrows - 10, 2900099, 2900099, 2900099, 2900099, 2900099, 2900099, 2900099 };
+		int maxArray = 5;
+		Long[] array = new Long[maxArray];
+		{
+			for (int i = 0; i < array.length; i++) {
+				array[i] = new Long(UtilTool.getRndInt(1, (int) maxrowsInt));
+			}
+		}
+		//ExecutorService pool = Executors. newSingleThreadExecutor();
+		//long array[] = { maxrows - 1, 2900099, 2710099, 2710099, 10, 1, 1500, 2900099, 2900099, maxrows - 10, 2900099, 2900099, 2900099, 2900099, 2900099, 2900099, 2900099 };
 		//long array[]={1,2,3,4,5,6,7,8};
-		System.out.println("--------11111111111111111111111----------------------");
+		System.out.println("--- 检索目标 ---");
+		{
+			System.out.println(UtilTool.getString(array, false));
+		}
+		System.out.println("--- 单线程 ---");
 		{
 			long time1 = System.nanoTime();
 			for (int i = 0; i < array.length; i++) {
-				System.out.println("length2:"+NodeCommon.length2(d));
-				System.out.println("****************-- search out" + i + " \t-->->->->:" + NodeCommon.toString(NodeCommon.searchByValue(d, array[i])));
+				NodeCommon.length2(d);
+				NodeCommon.toString(NodeCommon.searchByValue(d, array[i]));
+				//System.out.println("length2:" + NodeCommon.length2(d));
+				//System.out.println("****************-- search out" + i + " \t-->->->->:" + NodeCommon.toString(NodeCommon.searchByValue(d, array[i])));
 			}
-
 			long time2 = System.nanoTime();
 			System.out.println("SingleThreadtime:\t" + (time2 - time1));
 
 		}
-		System.out.println("--------22222222222222222222222----------------------");
+		System.out.println("--- 双线程 ---");
 		{
 			long time1 = System.nanoTime();
 			for (int i = 0; i < array.length; i++) {
-				System.out.println("length2:"+NodeCommon.length2(d));
+				//NodeCommon.length2(d);
+				//NodeCommon.toString(NodeCommon.searchByValue(d, array[i]));
+				System.out.println("length2:" + NodeCommon.length2(d));
 				System.out.println("****************-- search out" + i + " \t-->->->->:" + NodeCommon.toString(NodeCommon.searchByValueDeprecated(d, array[i])));
 			}
 			long time2 = System.nanoTime();
@@ -108,7 +126,7 @@ public class test2 {
 			sb.append("](N:");
 			if (super.getNext() != null) sb.append(UtilTool.format(System.identityHashCode(super.getNext()), size, ' '));
 			else sb.append("        ");
-			sb.append(")");
+			sb.append(')');
 			sb.append("\t[");
 			sb.append("value=");
 			sb.append(value);
