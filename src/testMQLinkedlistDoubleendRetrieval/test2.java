@@ -10,7 +10,7 @@ public class test2 {
 	public long maxrows = 3000000L;
 	public int maxrowsInt = 0;
 
-	@SuppressWarnings({ "unused", "deprecation" })
+	@SuppressWarnings({ "unused"})
 	@Test
 	public void test() {
 		if (maxrows > Integer.MAX_VALUE && maxrows < Integer.MIN_VALUE) {
@@ -49,7 +49,8 @@ public class test2 {
 		//node g = new node(12, "" + 12);
 		//NodeCommon.insertByHead(start, g);
 		//NodeCommon.toPrintAll(start);
-		int maxArray = 5;
+		int maxArray = 100;
+		
 		Long[] array = new Long[maxArray];
 		{
 			for (int i = 0; i < array.length; i++) {
@@ -59,9 +60,9 @@ public class test2 {
 		//ExecutorService pool = Executors. newSingleThreadExecutor();
 		//long array[] = { maxrows - 1, 2900099, 2710099, 2710099, 10, 1, 1500, 2900099, 2900099, maxrows - 10, 2900099, 2900099, 2900099, 2900099, 2900099, 2900099, 2900099 };
 		//long array[]={1,2,3,4,5,6,7,8};
-		System.out.println("--- 检索目标 ---");
+		System.out.println("--- 检索目标["+center+"] ---");
 		{
-			System.out.println(UtilTool.getString(array, false));
+			System.out.println(UtilTool.getString(array, false,center));
 		}
 		System.out.println("--- 单线程 ---");
 		{
@@ -80,10 +81,10 @@ public class test2 {
 		{
 			long time1 = System.nanoTime();
 			for (int i = 0; i < array.length; i++) {
-				//NodeCommon.length2(d);
-				//NodeCommon.toString(NodeCommon.searchByValue(d, array[i]));
-				System.out.println("length2:" + NodeCommon.length2(d));
-				System.out.println("****************-- search out" + i + " \t-->->->->:" + NodeCommon.toString(NodeCommon.searchByValueDeprecated(d, array[i])));
+				NodeCommon.length2(d);
+				NodeCommon.toString(NodeCommon.searchByValue(d, array[i]));
+				//System.out.println("length2:" + NodeCommon.length2(d));
+				//System.out.println("****************-- search out" + i + " \t-->->->->:" + NodeCommon.toString(NodeCommon.searchByValueDeprecated(d, array[i])));
 			}
 			long time2 = System.nanoTime();
 			System.out.println("MultiThreadtime:\t" + (time2 - time1));// /1000000L

@@ -34,14 +34,14 @@ public final class ThreadNodeAttribList {
 
 		@Override
 		public void forward() {
-			for (extNode p = input; p != null; p = p.Forward) {
+			for (extNode p = nodeRunBegin; p != null; p = p.Forward) {
 				if (p.extNodeValue() > this.value) sort1++;
 			}
 		}
 
 		@Override
 		public void next() {
-			for (extNode p = input; p != null; p = p.Next) {
+			for (extNode p = nodeRunBegin; p != null; p = p.Next) {
 				if (p.extNodeValue() > this.value) sort2++;
 			}
 		}
@@ -69,14 +69,14 @@ public final class ThreadNodeAttribList {
 
 		@Override
 		public void forward() {
-			for (extNode p = input; p != null; p = p.Forward) {
+			for (extNode p = nodeRunBegin; p != null; p = p.Forward) {
 				sort1++;
 			}
 		}
 
 		@Override
 		public void next() {
-			for (extNode p = input; p != null; p = p.Next) {
+			for (extNode p = nodeRunBegin; p != null; p = p.Next) {
 				sort2++;
 			}
 		}
@@ -91,9 +91,23 @@ public final class ThreadNodeAttribList {
 	 */
 	public static final class nodeAttrEquals extends ThreadNodeAttributeAbstract {
 		long value = 0L;
+		extNode forwardNode = null;
+		extNode nextNode = null;
 
 		nodeAttrEquals(long value) {
 			this.value = value;
+		}
+
+		/**
+		 * 得到结果节点，只得到一个即可
+		 * @return extNode
+		 */
+		public final extNode getResult() {
+			extNode p = null;
+			if (super.getDoubleFindSuccess()) {
+				p = (forwardNode != null) ? forwardNode : nextNode;
+			}
+			return p;
 		}
 
 		@Override
@@ -104,7 +118,7 @@ public final class ThreadNodeAttribList {
 
 		@Override
 		public void forward() {
-			for (extNode p = input; p != null; p = p.Forward) {
+			for (extNode p = nodeRunBegin; p != null; p = p.Forward) {
 				if (compare(p)) {
 					forwardNode = p;
 					break;
@@ -114,7 +128,7 @@ public final class ThreadNodeAttribList {
 
 		@Override
 		public void next() {
-			for (extNode p = input; p != null; p = p.Next) {
+			for (extNode p = nodeRunBegin; p != null; p = p.Next) {
 				if (compare(p)) {
 					nextNode = p;
 					break;

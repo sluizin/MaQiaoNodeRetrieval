@@ -1,7 +1,7 @@
 /**
  * 链表，节点。通用方法<br/>
- * 没有2的以接口实现<br/>
- * 有2的以抽象类abstract实现<br/>
+ * 以抽象类abstract实现<br/>
+ * 使用双线程从某节点，向相反方向检索(以空间换时间)<br/>
  * @author Sunjian
  * @QQ 75583378
  * @Email sluizin@sohu.com

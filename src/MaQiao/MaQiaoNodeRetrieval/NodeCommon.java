@@ -604,9 +604,11 @@ public final class NodeCommon {
 	 * @param rndNode extNode
 	 * @param nodeAttr ThreadNodeAttributeAbstract
 	 */
-	private static final void threadNodeRun(final extNode rndNode, final ThreadNodeAttributeAbstract nodeAttr) {
-		nodeAttr.input = rndNode;
-		ThreadNodeConsts.nodeThread1.nodeAttr = ThreadNodeConsts.nodeThread2.nodeAttr = nodeAttr;
-		ThreadNodeConsts.nodeThread1.working = ThreadNodeConsts.nodeThread2.working = true;
+	private static final void threadNodeRun(final extNode rndNode, final ThreadNodeAttributeAbstract nodeAttr) {		
+		nodeAttr.nodeRunBegin = rndNode;
+		ThreadNodeConsts.nodeThread1.init(nodeAttr, true);
+		ThreadNodeConsts.nodeThread2.init(nodeAttr, true);
+		//ThreadNodeConsts.nodeThread1.nodeAttr = ThreadNodeConsts.nodeThread2.nodeAttr = nodeAttr;
+		//ThreadNodeConsts.nodeThread1.working = ThreadNodeConsts.nodeThread2.working = true;
 	}
 }

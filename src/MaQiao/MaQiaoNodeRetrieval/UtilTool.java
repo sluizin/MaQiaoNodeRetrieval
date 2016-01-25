@@ -10,6 +10,15 @@ import java.util.Random;
  */
 public final class UtilTool {
 	static Random rd1 = new Random();
+
+	/**
+	 * 得到0-9随机数<br/>
+	 * @return int
+	 */
+	public final static int getRndNum() {
+		return rd1.nextInt(10);
+	}
+
 	/**
 	 * 得到min-max之间的随机数
 	 * @param min int
@@ -19,16 +28,20 @@ public final class UtilTool {
 	public final static int getRndInt(final int min, final int max) {
 		return min + rd1.nextInt(max - min + 1);
 	}
+
 	/**
 	 * 把数组输出成String
 	 * @param array T[]
 	 * @param multi boolean
+	 * @param center long
 	 * @return String
 	 */
-	public static final <T> String getString(final T[] array, final boolean multi) {
+	public static final <T> String getString(final T[] array, final boolean multi, final long center) {
 		StringBuilder sb = new StringBuilder(100);
 		if (multi) sb.append("-------------\n");
 		else sb.append('[');
+		String strString;
+		long tlong;
 		for (int i = 0, len = array.length; i < len; i++) {
 			T t = array[i];
 			if (t == null) continue;
@@ -37,14 +50,39 @@ public final class UtilTool {
 				sb.append('\"');
 				sb.append(array[i].toString());
 				sb.append('\"');
-			} else sb.append(array[i].toString());
-			if (i < len - 1)  if (!multi)sb.append(',');
+			} else {
+				strString = array[i].toString();
+				if (isDigit(strString)) {
+					tlong = Long.parseLong(strString);
+					if (tlong > center) sb.append('↑');/* ←→ */
+					else if (tlong == center) sb.append('=');
+					else sb.append('↓');
+				}
+				sb.append(strString);
+			}
+			if (i < len - 1) if (!multi) sb.append(',');
 			if (multi) sb.append('\n');
 		}
 		if (multi) sb.append("-------------\n");
 		else sb.append(']');
 		return sb.toString();
 	}
+
+	/**
+	 * 判断String是否由0-9组成[用于判断能否转成int或long型]
+	 * @param str String
+	 * @return boolean
+	 */
+	public static final boolean isDigit(final String str) {
+		if (null == str || str.length() == 0) return false;
+		int c;
+		for (int i = str.length(); --i >= 0;) {
+			c = str.charAt(i);
+			if (c < 48 || c > 57) return false;
+		}
+		return true;
+	}
+
 	/**
 	 * 格式化long 使用String.subString()方法
 	 * @param num long

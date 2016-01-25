@@ -1,4 +1,5 @@
 package MaQiao.MaQiaoNodeRetrieval;
+
 /**
  * 线程组常量
  * @author Sunjian
@@ -10,7 +11,6 @@ public final class ThreadNodeConsts {
 	/**
 	 * 静态化线程组
 	 * @author Sunjian
-	 *
 	 */
 	public static final class nodeThreadRun implements Runnable {
 		@SuppressWarnings("unused")
@@ -18,48 +18,56 @@ public final class ThreadNodeConsts {
 		volatile boolean working = true;
 		volatile boolean stopped = false;
 		volatile boolean forward = false;
-		volatile ThreadNodeAttributeAbstract nodeAttr = null;
+		volatile ThreadNodeAttributeAbstract nodeAttrib = null;
 
-		public nodeThreadRun() {
+		private nodeThreadRun() {
 		}
 
+		/**
+		 * 初始化
+		 * @param nodeAttr
+		 * @param forward
+		 */
 		public nodeThreadRun(ThreadNodeAttributeAbstract nodeAttr, boolean forward) {
-			this.nodeAttr = nodeAttr;
 			this.forward = forward;
+			init(nodeAttr, false);
+		}
+
+		/**
+		 * 得到线程锁，设置参数
+		 * @param nodeAttr ThreadNodeAttributeAbstract
+		 * @param working boolean
+		 */
+		public void init(final ThreadNodeAttributeAbstract nodeAttr, final boolean working) {
+			lock();
+			try {
+				this.nodeAttrib = nodeAttr;
+				this.working = working;
+			} finally {
+				unLock();
+			}
 		}
 
 		@Override
 		public void run() {
 			//System.out.println("Static " + Thread.currentThread().getName() + " starting.");
 			try {
-				while (true) {
-					if (this.working && nodeAttr != null) {
+				while (!stopped) {
+					if (this.working && nodeAttrib != null) {
 						lock();
-						if (forward) {
-							/*							for (p = nodeAttr.input; (nodeAttr.nextFinish==0) && p != null; p = p.Forward) {
-															if (nodeAttr.compare(p)) {
-																nodeAttr.forwardNode = p;
-																break;
-															}
-														}*/
-							nodeAttr.forward();
-							nodeAttr.forwardFinish = 1;
-
-						} else {
-							/*							for (p = nodeAttr.input;(nodeAttr.forwardFinish==0) && p != null; p = p.Next) {
-															if (nodeAttr.compare(p)) {
-																nodeAttr.nextNode = p;
-																break;
-															}
-														}*/
-
-							nodeAttr.next();
-							nodeAttr.nextFinish = 1;
+						try {
+							if (forward) {
+								nodeAttrib.forward();
+								nodeAttrib.stateFinishForward = true;
+							} else {
+								nodeAttrib.next();
+								nodeAttrib.stateFinishNext = true;
+							}
+						} finally {
+							this.working = false;
+							this.nodeAttrib = null;
+							unLock();
 						}
-						//System.out.println(Thread.currentThread().getName() + " -> over");
-						this.working = false;
-						this.nodeAttr = null;
-						unLock();
 					}
 				}
 			} catch (Exception exc) {
@@ -73,7 +81,7 @@ public final class ThreadNodeConsts {
 			stopped = true;
 		}
 
-		synchronized void WorkStop() {
+		synchronized void setWorkStop() {
 			working = false;
 		}
 
@@ -114,13 +122,13 @@ public final class ThreadNodeConsts {
 		try {
 			lockedOffset = Consts.UNSAFE.objectFieldOffset(nodeThreadRun.class.getDeclaredField("locked"));/*得到锁对象的偏移量*/
 			{
-				nodeThread1.nodeAttr = null;
+				nodeThread1.nodeAttrib = null;
 				nodeThread1.forward = false;
 			}
 			Thread myth1 = new Thread(nodeThreadGroup, nodeThread1);
 			myth1.setName("MyThread #1 ");
 			{
-				nodeThread1.nodeAttr = null;
+				nodeThread1.nodeAttrib = null;
 				nodeThread1.forward = true;
 			}
 			Thread myth2 = new Thread(nodeThreadGroup, nodeThread2);
