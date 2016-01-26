@@ -7,10 +7,10 @@ import MaQiao.MaQiaoNodeRetrieval.extNode;
 
 public class test2 {
 
-	public long maxrows = 3000000L;
+	private final long maxrows = 3000000L;
 	public int maxrowsInt = 0;
 
-	@SuppressWarnings({ "unused"})
+	@SuppressWarnings({ "unused", "deprecation"})
 	@Test
 	public void test() {
 		if (maxrows > Integer.MAX_VALUE && maxrows < Integer.MIN_VALUE) {
@@ -49,12 +49,15 @@ public class test2 {
 		//node g = new node(12, "" + 12);
 		//NodeCommon.insertByHead(start, g);
 		//NodeCommon.toPrintAll(start);
-		int maxArray = 100;
-		
-		Long[] array = new Long[maxArray];
+		final int maxArray = 20;
+		final int spaceMax=0;
+		Long[] array = new Long[maxArray+spaceMax];
 		{
 			for (int i = 0; i < array.length; i++) {
 				array[i] = new Long(UtilTool.getRndInt(1, (int) maxrowsInt));
+			}
+			for(int i=0;i<spaceMax;i++){
+				array[maxArray+i] = new Long(maxrowsInt-5);
 			}
 		}
 		//ExecutorService pool = Executors. newSingleThreadExecutor();
@@ -64,11 +67,12 @@ public class test2 {
 		{
 			System.out.println(UtilTool.getString(array, false,center));
 		}
+		System.out.println(UtilTool.minNum+"<-->"+(array.length-UtilTool.minNum));
 		System.out.println("--- 单线程 ---");
 		{
 			long time1 = System.nanoTime();
 			for (int i = 0; i < array.length; i++) {
-				NodeCommon.length2(d);
+				NodeCommon.length(d);
 				NodeCommon.toString(NodeCommon.searchByValue(d, array[i]));
 				//System.out.println("length2:" + NodeCommon.length2(d));
 				//System.out.println("****************-- search out" + i + " \t-->->->->:" + NodeCommon.toString(NodeCommon.searchByValue(d, array[i])));
@@ -82,7 +86,7 @@ public class test2 {
 			long time1 = System.nanoTime();
 			for (int i = 0; i < array.length; i++) {
 				NodeCommon.length2(d);
-				NodeCommon.toString(NodeCommon.searchByValue(d, array[i]));
+				NodeCommon.toString(NodeCommon.searchByValueDeprecated(d, array[i]));
 				//System.out.println("length2:" + NodeCommon.length2(d));
 				//System.out.println("****************-- search out" + i + " \t-->->->->:" + NodeCommon.toString(NodeCommon.searchByValueDeprecated(d, array[i])));
 			}

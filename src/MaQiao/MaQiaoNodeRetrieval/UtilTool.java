@@ -28,7 +28,7 @@ public final class UtilTool {
 	public final static int getRndInt(final int min, final int max) {
 		return min + rd1.nextInt(max - min + 1);
 	}
-
+	public static long minNum=0L;
 	/**
 	 * 把数组输出成String
 	 * @param array T[]
@@ -42,6 +42,7 @@ public final class UtilTool {
 		else sb.append('[');
 		String strString;
 		long tlong;
+		minNum = 0L;
 		for (int i = 0, len = array.length; i < len; i++) {
 			T t = array[i];
 			if (t == null) continue;
@@ -56,7 +57,10 @@ public final class UtilTool {
 					tlong = Long.parseLong(strString);
 					if (tlong > center) sb.append('↑');/* ←→ */
 					else if (tlong == center) sb.append('=');
-					else sb.append('↓');
+					else {
+						minNum++;
+						sb.append('↓');
+					}
 				}
 				sb.append(strString);
 			}
