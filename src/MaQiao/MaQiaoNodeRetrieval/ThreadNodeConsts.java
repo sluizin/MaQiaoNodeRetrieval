@@ -22,6 +22,8 @@ public final class ThreadNodeConsts {
 				final Thread mythread = new Thread(nodeThreadGroup, nodeThread);
 				mythread.setName("MyThread #[" + i + "] ");
 				mythread.start();
+				if(Consts.isOpenUNSAFEPark)
+				nodeThread.park();/* 初始化时，先挂起线程 */
 				nodeThreadRunArray[i] = nodeThread;
 			}
 		} catch (Exception e) {

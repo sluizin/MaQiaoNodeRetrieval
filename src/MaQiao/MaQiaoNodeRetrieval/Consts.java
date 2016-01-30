@@ -12,9 +12,13 @@ import sun.misc.Unsafe;
 public final class Consts {
 	public static final Unsafe UNSAFE;
 	/**
+	 * 是否打开线程挂起动作
+	 */
+	public static final boolean isOpenUNSAFEPark = false;
+	/**
 	 * 线程组数组最大容量
 	 */
-	public static final int threadArraySize = 2;/* 必须大于2 */
+	public static final int threadArraySize = 3;/* 必须大于2 */
 	/**
 	 * String对象中value(char[])地址偏移量
 	 */
@@ -23,7 +27,7 @@ public final class Consts {
 	 * Thread对象中target(Runnable)地址偏移量
 	 */
 	public static long ThreadRunnableOffset = 0L;
-	
+
 	static {
 		try {
 			//if (threadArraySize < 2) threadArraySize = 2;
@@ -40,7 +44,6 @@ public final class Consts {
 	 * char[]数组地址偏移量
 	 */
 	public static final long ArrayAddress = UNSAFE.arrayBaseOffset(char[].class);
-	public static final char[] array0 = { '0' };
 
 	/**
 	 * 初始化

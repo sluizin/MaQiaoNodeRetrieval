@@ -51,10 +51,11 @@ public final class nodeThreadRun implements Runnable {
 	 */
 	public boolean init(final ThreadNodeAttributeAbstract nodeAttr, final boolean forward) {
 		if (isFree()) {
+			if (Consts.isOpenUNSAFEPark) if (isPark) unpark();
 			CASlockInt(0, 2);
 			this.nodeAttrib = nodeAttr;
 			this.forward = forward;
-			locked <<= 1;
+			locked = 4;
 			//CASlockInt(2, 4);
 			return true;
 		} else {
@@ -69,7 +70,7 @@ public final class nodeThreadRun implements Runnable {
 			while (true) {
 				//System.out.println("XXX:" + locked);
 				if (testLock(4)) {
-				//if (locked == 4) {
+					//if (locked == 4) {
 					if (null != this.nodeAttrib) {
 						CASlockInt(4, 8);
 						try {
@@ -99,10 +100,17 @@ public final class nodeThreadRun implements Runnable {
 	}
 
 	/**
+	 * 判断此线程是否已挂起
+	 */
+	@Deprecated
+	boolean isPark = false;
+
+	/**
 	 * 挂起本线程
 	 */
 	public final void park() {
-		Consts.UNSAFE.park(false, 0L);
+		Consts.UNSAFE.park(true, 0L);
+		isPark = true;
 	}
 
 	/**
@@ -111,6 +119,7 @@ public final class nodeThreadRun implements Runnable {
 	public final void unpark() {
 		Thread t = getThreadthis(this);
 		if (t != null) Consts.UNSAFE.unpark(t);
+		isPark = false;
 	}
 
 	/**
@@ -134,6 +143,7 @@ public final class nodeThreadRun implements Runnable {
 
 	public final boolean isFree() {
 		//System.out.println(this.getName() + "[isFree](boolean):" + Consts.UNSAFE.compareAndSwapInt(this, lockedOffset, 0, 0));
+		if (Consts.isOpenUNSAFEPark) return isPark || Consts.UNSAFE.compareAndSwapInt(this, lockedOffset, 0, 0);
 		return Consts.UNSAFE.compareAndSwapInt(this, lockedOffset, 0, 0);
 	}
 
@@ -156,7 +166,12 @@ public final class nodeThreadRun implements Runnable {
 		final Thread threadArray[] = new Thread[ThreadNodeConsts.nodeThreadGroup.activeCount()];
 		ThreadNodeConsts.nodeThreadGroup.enumerate(threadArray);
 		for (Thread t : threadArray)
-			if ((nodeThreadRun) Consts.UNSAFE.getObject(t, Consts.ThreadRunnableOffset) == obj) return t;
+			if (getNodeThreadRun(t) == obj) return t;
 		return null;
+	}
+
+	public static final nodeThreadRun getNodeThreadRun(final Thread t) {
+		//if(t.isAlive())return null;
+		return (nodeThreadRun) Consts.UNSAFE.getObject(t, Consts.ThreadRunnableOffset);
 	}
 }

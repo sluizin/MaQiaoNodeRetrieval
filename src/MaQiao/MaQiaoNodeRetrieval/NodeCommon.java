@@ -5,8 +5,6 @@ import static MaQiao.MaQiaoNodeRetrieval.Consts.sequence;
 import java.util.ArrayList;
 import java.util.List;
 
-
-
 //import MaQiao.MaQiaoNodeRetrieval.attribList.nodeAttrCompare;
 import MaQiao.MaQiaoNodeRetrieval.attribList.nodeAttrEquals;
 import MaQiao.MaQiaoNodeRetrieval.attribList.nodeAttrSummary;
@@ -608,39 +606,44 @@ public final class NodeCommon {
 	 * @param rndNode extNode
 	 * @param nodeAttr ThreadNodeAttributeAbstract
 	 */
-	private static final void threadNodeRun(final extNode rndNode, final ThreadNodeAttributeAbstract nodeAttr) {		
+	private static final void threadNodeRun(final extNode rndNode, final ThreadNodeAttributeAbstract nodeAttr) {
 		nodeAttr.nodeRunBegin = rndNode;
 		{
 			//nodeThreadRun nodeThread1=getFreeThread();
 			//Consts.UNSAFE.park(arg0, arg1);
 			//System.out.println("selected1:"+nodeThread1.getName());
-			getFreeThread().init(nodeAttr,false);
+			getFreeThread().init(nodeAttr, false);
 			//System.out.println("select1!!!");
 		}
 		{
 			//nodeThreadRun nodeThread2=getFreeThread();
 			//System.out.println("selected2:"+nodeThread2.getName());
-			getFreeThread().init(nodeAttr,true);
+			getFreeThread().init(nodeAttr, true);
 			//System.out.println("select2!!!");
 		}
 	}
-	private static final nodeThreadRun getFreeThread(){
+
+	private static final nodeThreadRun getFreeThread() {
 		int i;
 		//showThreads();
-		while(true){
+		while (true) {
 			//System.out.println("Consts.threadArraySize:"+Consts.threadArraySize);
-			for(i=0;i<Consts.threadArraySize;i++){
+			for (i = 0; i < Consts.threadArraySize; i++) {
 				//System.out.println("testing.....Thread:["+i+"]:"+ThreadNodeConsts.nodeThreadRunArray[i].isFree());
-				if(ThreadNodeConsts.nodeThreadRunArray[i].isFree())return ThreadNodeConsts.nodeThreadRunArray[i];
+				if (ThreadNodeConsts.nodeThreadRunArray[i].isFree()) return ThreadNodeConsts.nodeThreadRunArray[i];
 			}
-			//System.out.println("find!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 		}
 	}
-	static final void showThreads(){
+
+	@SuppressWarnings("deprecation")
+	static final void showThreads() {
 		System.out.println("->->->->->->->->->->->->->->->->->->->->->->->->->->");
 		System.out.println("线程组状态");
-		for(int i=0;i<Consts.threadArraySize;i++){
-			System.out.println("Thread:["+i+"]{"+ThreadNodeConsts.nodeThreadRunArray[i].getName()+"}:isFree:"+ThreadNodeConsts.nodeThreadRunArray[i].isFree());
+		nodeThreadRun p = null;
+		for (int i = 0; i < Consts.threadArraySize; i++) {
+			p = ThreadNodeConsts.nodeThreadRunArray[i];
+			if (Consts.isOpenUNSAFEPark) System.out.println("Thread:[" + i + "]{" + p.getName() + "}:isFree:" + p.isFree() + "\tisPark:" + p.isPark);
+			else System.out.println("Thread:[" + i + "]{" + p.getName() + "}:isFree:" + p.isFree());
 		}
 		System.out.println("->->->->->->->->->->->->->->->->->->->->->->->->->->");
 	}
