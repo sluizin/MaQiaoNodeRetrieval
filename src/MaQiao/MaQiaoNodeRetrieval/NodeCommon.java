@@ -5,7 +5,11 @@ import static MaQiao.MaQiaoNodeRetrieval.Consts.sequence;
 import java.util.ArrayList;
 import java.util.List;
 
-import MaQiao.MaQiaoNodeRetrieval.ThreadNodeAttribList.nodeAttrSummary;
+
+
+//import MaQiao.MaQiaoNodeRetrieval.attribList.nodeAttrCompare;
+import MaQiao.MaQiaoNodeRetrieval.attribList.nodeAttrEquals;
+import MaQiao.MaQiaoNodeRetrieval.attribList.nodeAttrSummary;
 import MaQiao.MaQiaoNodeRetrieval.ThreadNodeConsts;
 
 /**
@@ -578,7 +582,7 @@ public final class NodeCommon {
 	@Deprecated
 	public static final extNode searchByValueDeprecated(final extNode rndNode, final long value) {
 		if (rndNode == null) return null;
-		ThreadNodeAttribList.nodeAttrEquals nodeAttr = new ThreadNodeAttribList.nodeAttrEquals(value);
+		nodeAttrEquals nodeAttr = new nodeAttrEquals(value);
 		threadNodeRun(rndNode, nodeAttr);
 		while (true) {
 			if (nodeAttr.getDoubleFindSuccess()) { return nodeAttr.getResult(); }
@@ -606,9 +610,38 @@ public final class NodeCommon {
 	 */
 	private static final void threadNodeRun(final extNode rndNode, final ThreadNodeAttributeAbstract nodeAttr) {		
 		nodeAttr.nodeRunBegin = rndNode;
-		ThreadNodeConsts.nodeThread1.init(nodeAttr, true);
-		ThreadNodeConsts.nodeThread2.init(nodeAttr, true);
-		//ThreadNodeConsts.nodeThread1.nodeAttr = ThreadNodeConsts.nodeThread2.nodeAttr = nodeAttr;
-		//ThreadNodeConsts.nodeThread1.working = ThreadNodeConsts.nodeThread2.working = true;
+		{
+			//nodeThreadRun nodeThread1=getFreeThread();
+			//Consts.UNSAFE.park(arg0, arg1);
+			//System.out.println("selected1:"+nodeThread1.getName());
+			getFreeThread().init(nodeAttr,false);
+			//System.out.println("select1!!!");
+		}
+		{
+			//nodeThreadRun nodeThread2=getFreeThread();
+			//System.out.println("selected2:"+nodeThread2.getName());
+			getFreeThread().init(nodeAttr,true);
+			//System.out.println("select2!!!");
+		}
+	}
+	private static final nodeThreadRun getFreeThread(){
+		int i;
+		//showThreads();
+		while(true){
+			//System.out.println("Consts.threadArraySize:"+Consts.threadArraySize);
+			for(i=0;i<Consts.threadArraySize;i++){
+				//System.out.println("testing.....Thread:["+i+"]:"+ThreadNodeConsts.nodeThreadRunArray[i].isFree());
+				if(ThreadNodeConsts.nodeThreadRunArray[i].isFree())return ThreadNodeConsts.nodeThreadRunArray[i];
+			}
+			//System.out.println("find!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+		}
+	}
+	static final void showThreads(){
+		System.out.println("->->->->->->->->->->->->->->->->->->->->->->->->->->");
+		System.out.println("线程组状态");
+		for(int i=0;i<Consts.threadArraySize;i++){
+			System.out.println("Thread:["+i+"]{"+ThreadNodeConsts.nodeThreadRunArray[i].getName()+"}:isFree:"+ThreadNodeConsts.nodeThreadRunArray[i].isFree());
+		}
+		System.out.println("->->->->->->->->->->->->->->->->->->->->->->->->->->");
 	}
 }

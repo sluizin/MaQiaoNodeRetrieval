@@ -12,15 +12,26 @@ import sun.misc.Unsafe;
 public final class Consts {
 	public static final Unsafe UNSAFE;
 	/**
+	 * 线程组数组最大容量
+	 */
+	public static final int threadArraySize = 2;/* 必须大于2 */
+	/**
 	 * String对象中value(char[])地址偏移量
 	 */
 	public static long StringArrayOffset = 0L;
+	/**
+	 * Thread对象中target(Runnable)地址偏移量
+	 */
+	public static long ThreadRunnableOffset = 0L;
+	
 	static {
 		try {
+			//if (threadArraySize < 2) threadArraySize = 2;
 			final Field field = Unsafe.class.getDeclaredField("theUnsafe");
 			field.setAccessible(true);
 			UNSAFE = (Unsafe) field.get(null);
-			StringArrayOffset = UNSAFE.objectFieldOffset(String.class.getDeclaredField("value"));/*得到String对象中数组的偏移量*/
+			StringArrayOffset = UNSAFE.objectFieldOffset(java.lang.String.class.getDeclaredField("value"));/* 得到String对象中数组的偏移量 */
+			ThreadRunnableOffset = UNSAFE.objectFieldOffset(java.lang.Thread.class.getDeclaredField("target"));/* 得到Thread对象中target(Runnable)地址偏移量 */
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}

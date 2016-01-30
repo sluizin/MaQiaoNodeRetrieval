@@ -10,7 +10,7 @@ public class test2 {
 	private final long maxrows = 3000000L;
 	public int maxrowsInt = 0;
 
-	@SuppressWarnings({ "unused", "deprecation"})
+	@SuppressWarnings({ "unused", "deprecation" })
 	@Test
 	public void test() {
 		if (maxrows > Integer.MAX_VALUE && maxrows < Integer.MIN_VALUE) {
@@ -49,46 +49,52 @@ public class test2 {
 		//node g = new node(12, "" + 12);
 		//NodeCommon.insertByHead(start, g);
 		//NodeCommon.toPrintAll(start);
-		final int maxArray = 20;
-		final int spaceMax=0;
-		Long[] array = new Long[maxArray+spaceMax];
+		final int maxArray = 10;
+		/*
+		 * 比中间值向后的数量[遍历时向后的数量]
+		 * 一般的单线程遍历时先向前再向后，所以单线程要多遍历很多
+		 */
+		final int spaceMax = 20;
+		Long[] array = new Long[maxArray + spaceMax];
 		{
 			for (int i = 0; i < array.length; i++) {
 				array[i] = new Long(UtilTool.getRndInt(1, (int) maxrowsInt));
 			}
-			for(int i=0;i<spaceMax;i++){
-				array[maxArray+i] = new Long(maxrowsInt-5);
+			for (int i = 0; i < spaceMax; i++) {
+				array[maxArray + i] = new Long(UtilTool.getRndInt(center, (int) maxrowsInt));//new Long(maxrowsInt - 5);
 			}
 		}
 		//ExecutorService pool = Executors. newSingleThreadExecutor();
 		//long array[] = { maxrows - 1, 2900099, 2710099, 2710099, 10, 1, 1500, 2900099, 2900099, maxrows - 10, 2900099, 2900099, 2900099, 2900099, 2900099, 2900099, 2900099 };
 		//long array[]={1,2,3,4,5,6,7,8};
-		System.out.println("--- 检索目标["+center+"] ---");
+		System.out.println("--- 检索目标[" + center + "] ---");
 		{
-			System.out.println(UtilTool.getString(array, false,center));
+			System.out.println(UtilTool.getString(array, false, center));
 		}
-		System.out.println(UtilTool.minNum+"<-->"+(array.length-UtilTool.minNum));
+		System.out.println(UtilTool.minNum + "<-->" + (array.length - UtilTool.minNum));
 		System.out.println("--- 单线程 ---");
 		{
 			long time1 = System.nanoTime();
 			for (int i = 0; i < array.length; i++) {
 				NodeCommon.length(d);
 				NodeCommon.toString(NodeCommon.searchByValue(d, array[i]));
-				//System.out.println("length2:" + NodeCommon.length2(d));
+				//System.out.println("length2:" + NodeCommon.length(d));
 				//System.out.println("****************-- search out" + i + " \t-->->->->:" + NodeCommon.toString(NodeCommon.searchByValue(d, array[i])));
 			}
 			long time2 = System.nanoTime();
 			System.out.println("SingleThreadtime:\t" + (time2 - time1));
-
 		}
-		System.out.println("--- 双线程 ---");
+		System.out.println("--- 多线程 ---");
 		{
 			long time1 = System.nanoTime();
 			for (int i = 0; i < array.length; i++) {
 				NodeCommon.length2(d);
-				NodeCommon.toString(NodeCommon.searchByValueDeprecated(d, array[i]));
+				//System.out.println("------------------------------");
+				NodeCommon.searchByValueDeprecated(d, array[i]);
 				//System.out.println("length2:" + NodeCommon.length2(d));
 				//System.out.println("****************-- search out" + i + " \t-->->->->:" + NodeCommon.toString(NodeCommon.searchByValueDeprecated(d, array[i])));
+
+				//System.out.println("---------------------------------------------------------------------------------");
 			}
 			long time2 = System.nanoTime();
 			System.out.println("MultiThreadtime:\t" + (time2 - time1));// /1000000L

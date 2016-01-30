@@ -7,7 +7,7 @@ package MaQiao.MaQiaoNodeRetrieval;
  * @version 1.0
  */
 public abstract class extNode {
-	extNode Forward = null;
+	public extNode Forward = null;
 
 	public final extNode getForward() {
 		return Forward;
@@ -17,7 +17,7 @@ public abstract class extNode {
 		this.Forward = f;
 	}
 
-	extNode Next = null;
+	public extNode Next = null;
 
 	public final extNode getNext() {
 		return Next;

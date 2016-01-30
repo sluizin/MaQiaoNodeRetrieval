@@ -1,5 +1,6 @@
 package MaQiao.MaQiaoNodeRetrieval;
 
+
 /**
  * 节点抽象类
  * @version 1.0
@@ -10,7 +11,7 @@ public abstract class ThreadNodeAttributeAbstract {
 	/**
 	 * 线程运行启始节点<br/>
 	 */
-	extNode nodeRunBegin = null;
+	protected extNode nodeRunBegin = null;
 	/**
 	 * 线程运行状态[向前]，是否已检索完<br/>
 	 */

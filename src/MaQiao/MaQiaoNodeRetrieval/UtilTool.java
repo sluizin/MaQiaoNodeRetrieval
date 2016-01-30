@@ -28,7 +28,9 @@ public final class UtilTool {
 	public final static int getRndInt(final int min, final int max) {
 		return min + rd1.nextInt(max - min + 1);
 	}
-	public static long minNum=0L;
+
+	public static long minNum = 0L;
+
 	/**
 	 * 把数组输出成String
 	 * @param array T[]
@@ -118,7 +120,7 @@ public final class UtilTool {
 	 */
 	public static final String format(final String str, final int size, final char c) {
 		final int len = str.length();
-		if (len <= 0 || size <= 0) return new String("");
+		if (str == null || len <= 0 || size <= 0) return new String("");
 		final String newString = new String(new char[size]);
 		final Object objSource = Consts.UNSAFE.getObject(str, Consts.StringArrayOffset);
 		final Object objDest = Consts.UNSAFE.getObject(newString, Consts.StringArrayOffset);
